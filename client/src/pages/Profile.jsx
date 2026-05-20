@@ -280,7 +280,7 @@ const Profile = () => {
           </h1>
         </button>
         <p className="text-red-700 text-center">
-          {showListingsError ? "Error showing listings" : "You do not have any listings yet !"}
+          {showListingsError ? "Error showing listings" : ""}
         </p>
 
         {userListings && userListings.length > 0 && (
