@@ -9,7 +9,7 @@ import authRouter from './routes/auth.route.js';
 import cookieParser from 'cookie-parser';
 import listingRouter from './routes/listing.route.js';
 import floorplanRouter from './routes/floorplan.route.js';
-import path from "path";
+
 
 
 const __filename = fileURLToPath(import.meta.url);
