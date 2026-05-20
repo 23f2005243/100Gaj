@@ -10,8 +10,6 @@ import cookieParser from 'cookie-parser';
 import listingRouter from './routes/listing.route.js';
 import floorplanRouter from './routes/floorplan.route.js';
 
-
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -25,9 +23,6 @@ mongoose
   .catch((err) => {
     console.log("Error connecting to MongoDB: ", err);
   });
-
-
-  const __dirname = path.resolve();
 
 const app = express();
 app.use(express.json());
@@ -50,7 +45,7 @@ app.use('/api/floorplan', floorplanRouter);
 
 app.use(express.static(path.join(__dirname, '/client/dist')));
 
-app.get('*', (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
