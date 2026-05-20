@@ -31,7 +31,7 @@ const CreateListing = () => {
 
   console.log(formData);
 
-  const handleImageSubmit = (e) => {
+  const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
       setImageUploadError(false);
@@ -50,7 +50,7 @@ const CreateListing = () => {
       setImageUploadError(false);
       setUploading(false);
     })
-    .catch((err) => {
+    .catch(() => {
       setImageUploadError("image upload failed. (2 MB max per image)");
       setUploading(false);
     });
@@ -133,6 +133,7 @@ const CreateListing = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           ...formData,
           userRef: currentUser._id,
@@ -305,7 +306,7 @@ const CreateListing = () => {
               disabled={uploading}
               onClick={handleImageSubmit}
               type="button"
-              className="p-3 text-white bg-emerald-800 rounded uppercase hover:shadow-lg disabled:opacity-80"
+              className="p-3 text-white bg-emerald-500 rounded uppercase hover:shadow-lg disabled:opacity-80"
             >
               {uploading ? "Uploading..." : "Upload"}
             </button>
@@ -322,7 +323,7 @@ const CreateListing = () => {
               </button>
             </div>
           ))}
-          <button disabled={loading || uploading} className="p-3 bg-slate-900 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
+          <button disabled={loading || uploading} className="p-3 bg-blue-500 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
             {loading ? "Creating..." : "Create Listing"}
           </button>
           {error && <p className="text-red-700 text-sm">{error}</p>}

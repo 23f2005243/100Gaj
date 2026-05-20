@@ -15,20 +15,19 @@ const OAuth = () => {
 
             const result = await signInWithPopup(auth, provider);
 
-            const res = await fetch("/api/auth/google", {
+            const { fetchJson } = await import("../utils/fetchJson.js");
+            const data = await fetchJson("/api/auth/google", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: "include",
                 body: JSON.stringify({
                     name: result.user.displayName,
                     email: result.user.email,
                     photo: result.user.photoURL,
                 }),
             });
-
-
-            const data = await res.json();
 
             dispatch(signInSuccess(data));
             navigate("/");
@@ -41,7 +40,7 @@ const OAuth = () => {
     };
 
   return (
-    <button onClick={handleGoogleClick} type="button" className ="bg-black text-white p-3 rounded-lg uppercase hover:opacity-95">
+    <button onClick={handleGoogleClick} type="button" className ="bg-orange-400 text-slate-800 p-3 rounded-lg uppercase hover:opacity-95">
         Continue with Google
     </button>
   )

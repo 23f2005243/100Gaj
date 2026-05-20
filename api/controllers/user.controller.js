@@ -15,15 +15,21 @@ export const updateUser = async (req, res, next) => {
       req.body.password = bcrypt.hashSync(req.body.password, 10);
     }
 
+    const updateFields = {
+      username: req.body.username,
+      email: req.body.email,
+      avatar: req.body.avatar,
+    };
+
+    // Only include password in update if it was provided
+    if (req.body.password) {
+      updateFields.password = req.body.password;
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
-          avatar: req.body.avatar,
-        },
+        $set: updateFields,
       },
       { new: true },
     );
@@ -40,17 +46,21 @@ export const deleteUser = async (req, res, next) => {
     return next(errorHandler(401, "You can only delete your own account!"));
   try {
     await User.findByIdAndDelete(req.params.id);
-    res.clearCookie("access_token");
-    res.status(200).json("User deleted successfully!");
+    res.clearCookie("access_token", {
+      path: "/",
+      sameSite: "lax",
+    });
+    res.status(200).json({ success: true, message: "User deleted successfully!" });
   } catch (error) {
     next(error);
   }
 };
 
 export const getUserListings = async (req, res, next) => {
-  if (req.user.id === req.params.id) {
+  const requestedId = req.params.id && req.params.id !== "undefined" ? req.params.id : req.user.id;
+  if (req.user.id === requestedId) {
     try {
-      const listings = await Listing.find({ userRef: req.params.id });
+      const listings = await Listing.find({ userRef: requestedId });
       res.status(200).json(listings);
     } catch (error) {
       next(error);

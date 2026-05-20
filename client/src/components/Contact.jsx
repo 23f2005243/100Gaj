@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 const Contact = ({ listing }) => {
     const [landlord, setLandlord] = useState(null);
@@ -47,13 +46,16 @@ const Contact = ({ listing }) => {
                         placeholder="Enter your message here..."
                         className="w-full border p-3 rounded-lg"
                     ></textarea>
-
-                    <Link
-                        to={`mailto:${landlord.email}?subject=Regarding ${listing.name}&body=${message}`}
-                        className="bg-slate-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
+                    <a
+                        href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(landlord.email)}&su=${encodeURIComponent(`Regarding ${listing.name}`)}&body=${encodeURIComponent(message)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="bg-green-700 text-white text-center p-3 uppercase rounded-lg hover:opacity-95"
                     >
                         Send Message
-                    </Link>
+                    </a>
+
+
                 </div>
             )}
         </div>

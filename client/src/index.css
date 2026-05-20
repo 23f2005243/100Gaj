@@ -2,6 +2,139 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Light Blue & Light Orange Palette Background */
 body {
-    background-color: rgb(122, 171, 227);
+    background: linear-gradient(135deg, #E6F3FF 0%, #FFF5E6 50%, #FFE4B5 100%);
+    min-height: 100vh;
 }
+
+/* Floating Animation Keyframes */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Slow rotation for ambient “orbit” effects */
+@keyframes spin-slow {
+    from { transform: translate(-50%, 0) rotate(0deg); }
+    to { transform: translate(-50%, 0) rotate(360deg); }
+}
+
+@keyframes spin-slow-reverse {
+    from { transform: translate(-50%, 0) rotate(0deg); }
+    to { transform: translate(-50%, 0) rotate(-360deg); }
+}
+
+/* Bubble drift */
+@keyframes bubble-float {
+    0%, 100% { transform: translate3d(0px, 0px, 0) scale(1); opacity: 0.95; }
+    50% { transform: translate3d(0px, -28px, 0) scale(1.08); opacity: 0.75; }
+}
+
+/* Conic sweep */
+@keyframes sweep {
+    0% { transform: rotate(0deg) translateX(-2%); opacity: 0.65; }
+    50% { transform: rotate(24deg) translateX(2%); opacity: 0.9; }
+    100% { transform: rotate(0deg) translateX(-2%); opacity: 0.65; }
+}
+
+/* Utility classes used by background component */
+.animate-spin-slow {
+    animation: spin-slow 34s linear infinite;
+}
+
+.animate-spin-slow-reverse {
+    animation: spin-slow-reverse 44s linear infinite;
+}
+
+.animate-bubble-float {
+    animation-name: bubble-float;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+
+/* Float Up Animation */
+@keyframes float-up {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Glow Effect */
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(255, 191, 115, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 191, 115, 0.8);
+    }
+}
+
+/* Float Card Effects */
+.float-card {
+    animation: float 3s ease-in-out infinite;
+    transition: all 0.3s ease;
+}
+
+
+.float-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Hover Scale Effect */
+.hover-scale {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Floating Section */
+.floating-section {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Button Hover Effects */
+.btn-float {
+    transition: all 0.3s ease;
+}
+
+.btn-float:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Float Animation with Delays */
+.float-delay-1 {
+    animation-delay: 0.2s;
+}
+
+.float-delay-2 {
+    animation-delay: 0.4s;
+}
+
+.float-delay-3 {
+    animation-delay: 0.6s;
+}
+
+/* Gradient Text */
+.gradient-text {
+    background: linear-gradient(135deg, #1A8CFF 0%, #FFAD52 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+

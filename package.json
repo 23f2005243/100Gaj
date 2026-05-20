@@ -14,11 +14,14 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
-    "dotenv": "^17.4.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "mongodb": "^7.1.1",
-    "mongoose": "^9.4.1",
-    "nodemon": "^3.1.14"
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.6.2",
+    "nodemon": "^3.1.14",
+    "openai": "^6.37.0",
+    "replicate": "^1.4.0"
   }
 }

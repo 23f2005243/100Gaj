@@ -11,6 +11,16 @@ export const signup = async (req, res, next) => {
         await newUser.save();
         res.status(201).json({ success: true, message: "User created successfully" });
     } catch (error) {
+        // Handle duplicate key error (E11000)
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyPattern)[0];
+            if (field === 'email') {
+                return res.status(400).json({ success: false, message: "The user already exists." });
+            }
+            if (field === 'username') {
+                return res.status(400).json({ success: false, message: "Username is already taken." });
+            }
+        }
         next(error);
     }
     
@@ -19,12 +29,16 @@ export const signup = async (req, res, next) => {
 
 export const signin = async (req, res, next) => {
     const { email, password } = req.body;
-    try{
+    try {
+        // If email/password are missing, fail fast
+        if (!email || !password) return next(errorHandler(400, "Email and password are required"));
+
         const validUser = await User.findOne({ email });
         if (!validUser) return next(errorHandler(404, "User not found"));
 
         const validPassword = bcryptjs.compareSync(password, validUser.password);
         if (!validPassword) return next(errorHandler(401, "Invalid credentials"));
+
 
         const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
         const { password: pass, ...rest } = validUser._doc;
@@ -32,7 +46,12 @@ export const signin = async (req, res, next) => {
 
 
         res
-          .cookie("access_token", token, {httpOnly: true})
+          .cookie("access_token", token, {
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false,
+            path: "/",
+          })
           .status(200)
           .json(rest);
 
@@ -49,7 +68,12 @@ export const google = async (req, res, next) => {
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
             const { password, ...rest } = user._doc;
             res
-              .cookie("access_token", token, {httpOnly: true})
+              .cookie("access_token", token, {
+                httpOnly: true,
+                sameSite: "lax",
+                secure: false,
+                path: "/",
+              })
               .status(200)
               .json(rest);
         } else{
@@ -66,7 +90,12 @@ export const google = async (req, res, next) => {
             const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
             const { password, ...rest } = newUser._doc;
             res
-              .cookie("access_token", token, {httpOnly: true})
+              .cookie("access_token", token, {
+                httpOnly: true,
+                sameSite: "lax",
+                secure: false,
+                path: "/",
+              })
               .status(200)
               .json(rest);
 
@@ -79,9 +108,15 @@ export const google = async (req, res, next) => {
 
 export const signOut = async (req, res, next) => {
     try {
-        res.clearCookie("access_token");
-        res.status(200).json("User signed out successfully");
+        // include same flags as cookie creation
+        res.clearCookie("access_token", {
+            path: "/",
+            sameSite: "lax",
+            httpOnly: true,
+            secure: false,
+        });
+        return res.status(200).json({ success: true, message: "User signed out successfully" });
     } catch (error) {
-        next(error);
+        return next(error);
     }
 };
