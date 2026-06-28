@@ -27,16 +27,17 @@ mongoose
 const app = express();
 app.use(express.json());
 
+const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
+
 // Allow Vite dev server to send cookies (JWT stored in httpOnly cookie)
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: clientOrigin,
     credentials: true,
   })
 );
 
 app.use(cookieParser());
-
 
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
@@ -59,7 +60,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
