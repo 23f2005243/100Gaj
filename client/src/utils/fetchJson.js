@@ -1,5 +1,8 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
 export async function fetchJson(url, options = {}) {
-  const res = await fetch(url, options);
+  const fullUrl = `${API_BASE_URL}${url}`;
+  const res = await fetch(fullUrl, options);
 
   // Try to fail fast on non-2xx but still parse any JSON body if present.
   if (!res.ok) {
