@@ -58,11 +58,16 @@ app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 app.use('/api/floorplan', floorplanRouter);
 
-const clientDistPath = path.join(__dirname, '../client/dist');
-app.use(express.static(clientDistPath));
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'API server is running' });
+});
 
 app.use((req, res) => {
-  res.sendFile(path.join(clientDistPath, 'index.html'));
+  res.status(404).json({
+    success: false,
+    statusCode: 404,
+    message: 'Route not found',
+  });
 });
 
 app.use((err, req, res, next) => {
