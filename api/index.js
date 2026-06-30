@@ -27,17 +27,31 @@ mongoose
 const app = express();
 app.use(express.json());
 
-const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
+const clientOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5173")
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
-// Allow Vite dev server to send cookies (JWT stored in httpOnly cookie)
+// Allow the frontend origin(s) to send cookies (JWT stored in httpOnly cookie)
 app.use(
   cors({
-    origin: clientOrigin,
+    origin: (origin, callback) => {
+      if (!origin || clientOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
     credentials: true,
   })
 );
 
 app.use(cookieParser());
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
 
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
