@@ -44,10 +44,11 @@ app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 app.use('/api/floorplan', floorplanRouter);
 
-app.use(express.static(path.join(__dirname, '/client/dist')));
+const clientDistPath = path.join(__dirname, '../client/dist');
+app.use(express.static(clientDistPath));
 
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+  res.sendFile(path.join(clientDistPath, 'index.html'));
 });
 
 app.use((err, req, res, next) => {
